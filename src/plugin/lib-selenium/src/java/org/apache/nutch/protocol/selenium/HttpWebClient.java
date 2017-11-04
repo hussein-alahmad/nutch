@@ -37,6 +37,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxBinary;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.firefox.FirefoxProfile;
 import org.openqa.selenium.io.TemporaryFilesystem;
 import org.openqa.selenium.remote.DesiredCapabilities;
@@ -59,12 +60,14 @@ public class HttpWebClient {
     @Override
     protected WebDriver initialValue()
     {
+      FirefoxOptions options = new FirefoxOptions();
       FirefoxProfile profile = new FirefoxProfile();
       profile.setPreference("permissions.default.stylesheet", 2);
       profile.setPreference("permissions.default.image", 2);
       profile.setPreference("dom.ipc.plugins.enabled.libflashplayer.so", "false");
       profile.setPreference(FirefoxProfile.ALLOWED_HOSTS_PREFERENCE, "localhost");
-      WebDriver driver = new FirefoxDriver(profile);
+      options.setProfile(profile);
+      WebDriver driver = new FirefoxDriver(options);
       return driver;          
     };
   };
@@ -83,6 +86,7 @@ public class HttpWebClient {
           	boolean enableFlashPlayer = conf.getBoolean("selenium.firefox.enable.flash", false);
           	int loadImage = conf.getInt("selenium.firefox.load.image", 1);
           	int loadStylesheet = conf.getInt("selenium.firefox.load.stylesheet", 1);
+          	    FirefoxOptions options = new FirefoxOptions();
     		    FirefoxProfile profile = new FirefoxProfile();
     		    FirefoxBinary binary = new FirefoxBinary();
     		    profile.setPreference(FirefoxProfile.ALLOWED_HOSTS_PREFERENCE, allowedHost);
@@ -90,7 +94,9 @@ public class HttpWebClient {
     		    profile.setPreference("permissions.default.stylesheet", loadStylesheet);
   	      	profile.setPreference("permissions.default.image", loadImage);
     		    binary.setTimeout(TimeUnit.SECONDS.toMillis(firefoxBinaryTimeout));
-            driver = new FirefoxDriver(binary, profile);
+            options.setProfile(profile);
+            options.setBinary(binary);
+            driver = new FirefoxDriver(options);
             break;
           case "chrome":
             driver = new ChromeDriver();
