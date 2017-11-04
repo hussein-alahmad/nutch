@@ -25,6 +25,9 @@
    provider-name="org.apache.nutch">
 
    <runtime>
+     <library name="lib-selenium.jar">
+        <export name="*"/>
+     </library>
      <library name="animal-sniffer-annotations-1.14.jar">
        <export name="*"/>
      </library>
